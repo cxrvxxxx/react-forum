@@ -12,27 +12,12 @@ import AppContext from './contexts/AppContext';
 import './styles/App.css';
 
 function App() {
-  const [posts, setPosts] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const { pathname } = useLocation();
 
   const value = {
-    posts,
     isLoaded
   }
-
-  useEffect(() => {
-    axios.get("https://jsonplaceholder.typicode.com/posts")
-      .then(response => {
-        if (response.status === 200) {
-          setPosts(response.data);
-          setIsLoaded(true);
-        }
-      })
-      .catch(error => {
-        setIsLoaded(false);
-      });
-  }, []);
 
   return (
     <AppContext.Provider value={value}>
