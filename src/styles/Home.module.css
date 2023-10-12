@@ -1,0 +1,12 @@
+.home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.text {
+    text-align: center;
+    vertical-align: center;
+    font-weight: bolder;
+}

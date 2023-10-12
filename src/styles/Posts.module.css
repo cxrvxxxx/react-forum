@@ -1,0 +1,28 @@
+.posts-container {
+    height: 100vh;
+}
+
+.posts-content {
+    border-radius: 20px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+    margin-top: 0.5em;
+    padding: 1em 2em;
+}
+
+.post-item {
+    text-decoration: none;
+    color: black;
+}
+
+.post-thumbnail {
+    border-radius: 0.5em;
+    padding: 0.2em 0.5em;
+}
+
+.post-thumbnail:hover {
+    background-color: aliceblue;
+}
+
+.post-title {
+    font-weight: bolder;
+}
