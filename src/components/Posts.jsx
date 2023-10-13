@@ -75,9 +75,9 @@ const Posts = () => {
               <Link className={`${styles['post-item']}`} key={key.current++} to={`/posts/${post.id}`} >
                 <div className={`${styles['post-thumbnail']} container-fluid d-flex flex-column`} key={key.current++}>
                   <span className={`${styles['post-title']}`}>{post.title}</span>
-                  <div className="container-fluid d-flex justify-content-between align-items-center px-0">
-                    <small className="mx-0" key={key.current++}>👤 <i>{(users.find(user => user.id === post.userId)).username}</i></small>
-                    <small className="mx-3" key={key.current++}><i>Comments: </i>{[comments.filter(comment => comment.postId === post.id)].length} 💬 </small>
+                  <div className="container-fluid d-flex justify-content-start align-items-center px-0">
+                    <small className="col-md-2 mx-0" key={key.current++}>👤 <i>{(users.find(user => user.id === post.userId)).username}</i></small>
+                    <small className="col-md-10 mx-3" key={key.current++}>💬 <i>Comments: </i>{comments.filter(comment => comment.postId === post.id).length} </small>
                   </div>
                 </div>
                 {index < posts.length - 1 && <hr className="my-1" />}
@@ -89,10 +89,10 @@ const Posts = () => {
             <CircularProgress />
           </div>
         }
-        <ul className="pagination d-flex justify-content-between mt-4 px-3">
-          <li className="page-item">
+        <ul className="pagination row d-flex justify-content-between mt-4 px-3">
+          <li className="col-md-4 page-item d-flex justify-content-center">
             <button
-              className="page-link"
+              className={`${styles['navi-button']} page-link`}
               aria-label="Previous"
               onClick={() => {
                 setPage(prev => (prev - 1));
@@ -102,12 +102,12 @@ const Posts = () => {
               <span className="sr-only">Previous</span>
             </button>
           </li>
-          <li className="page-item d-flex justify-content-center align-items-center">
-            Page {page + 1} out of {Math.ceil(posts.length / pageSize)}
+          <li className="col-md-4  page-item d-flex justify-content-center align-items-center">
+            Page {page + 1} of {Math.ceil(posts.length / pageSize)}
           </li>
-          <li className="page-item">
+          <li className="col-md-4  page-item d-flex justify-content-center">
             <button
-              className="page-link"
+              className={`${styles['navi-button']} page-link`}
               aria-label="Next"
               onClick={() => {
                 setPage(prev => (prev + 1));

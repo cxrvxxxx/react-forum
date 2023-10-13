@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
 import ForumNavbar from './components/Navbar';
@@ -20,10 +20,6 @@ function App() {
     setIsLoaded
   }
 
-  useEffect(() => {
-    console.log(pathname);
-  }, [pathname])
-
   return (
     <AppContext.Provider value={value}>
       <div className="App">
@@ -35,11 +31,13 @@ function App() {
               (pathname.split("/")).slice(1, pathname.split("/").length).map(path => `➜ ${path}`)
             }</small>
           </div>}
+
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/posts" element={<Posts />} />
             <Route path="/posts/:id" element={<Post />} />
           </Routes>
+
         </div>
 
       </div>

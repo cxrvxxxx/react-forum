@@ -34,6 +34,8 @@ const Post = () => {
   }, []);
 
   useEffect(() => {
+    if (!post) return;
+
     axios.get(`https://jsonplaceholder.typicode.com/users/${post?.userId}`)
       .then(response => {
         if (response.status === 200) {
@@ -79,7 +81,7 @@ const Post = () => {
                 </span>
               </span>
             </div>
-            <div className="col-md-9 py-2">
+            <div className="col-md-9 py-2 px-4">
               {post?.body}
             </div>
           </div>
@@ -101,10 +103,10 @@ const Post = () => {
                   <div className="row">
                     <div className="col-md-3">
                       <div className={`${styles['reply-user']} h-100 px-3`}>
-                        <span className="d-flex justify-content-end pt-2">{comment?.email}</span>
+                        <span className="d-flex justify-content-center pt-2">{comment?.email}</span>
                       </div>
                     </div>
-                    <div className="col-md-9 py-2 d-flex flex-column">
+                    <div className="col-md-9 px-4 py-2 d-flex flex-column">
                       <span><b>{comment?.name}</b></span>
                       <span className="mt-3">{comment?.body}</span>
                     </div>
