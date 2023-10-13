@@ -1,0 +1,22 @@
+.post {
+    padding-bottom: 8em;
+}
+
+.post-container {
+    border-radius: 1em;
+}
+
+.avatar {
+    padding: 10px;
+    font-size: 4rem;
+    border: solid 1px black;
+    border-radius: 0.1em;
+}
+
+.user-display {
+    background-color: #f0f0f0;
+}
+
+.reply-user {
+    background-color: #f0f0f0;
+}

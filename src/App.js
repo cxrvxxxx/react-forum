@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
 import ForumNavbar from './components/Navbar';
@@ -12,26 +11,36 @@ import AppContext from './contexts/AppContext';
 import './styles/App.css';
 
 function App() {
-  const [isLoaded, setIsLoaded] = useState(false);
   const { pathname } = useLocation();
 
+  const [isLoaded, setIsLoaded] = useState(false);
+
   const value = {
-    isLoaded
+    isLoaded,
+    setIsLoaded
   }
+
+  useEffect(() => {
+    console.log(pathname);
+  }, [pathname])
 
   return (
     <AppContext.Provider value={value}>
       <div className="App">
         <ForumNavbar />
 
-        {pathname !== '/' && <div className="container d-flex align-items-bottom">
-          <small className="breadcrumbs mt-5">Forums{pathname}</small>
-        </div>}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/posts" element={<Posts />} />
-          <Route path="/posts/:id" element={<Post />} />
-        </Routes>
+        <div className="app-content">
+          {pathname !== '/' && <div className="container d-flex align-items-bottom">
+            <small className="breadcrumbs mt-5">Forums {
+              (pathname.split("/")).slice(1, pathname.split("/").length).map(path => `➜ ${path}`)
+            }</small>
+          </div>}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/posts" element={<Posts />} />
+            <Route path="/posts/:id" element={<Post />} />
+          </Routes>
+        </div>
 
       </div>
     </AppContext.Provider>

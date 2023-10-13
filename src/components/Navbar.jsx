@@ -8,7 +8,7 @@ import styles from '../styles/Navbar.module.css'
 
 const ForumNavbar = () => {
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="navi bg-body-tertiary">
       <Container>
         <Link to="/" className="navbar-brand">💬 Forum</Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
