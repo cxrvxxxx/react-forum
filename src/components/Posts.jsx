@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 
 import { CircularProgress } from "@mui/material";
@@ -15,54 +14,12 @@ const Posts = () => {
   const { isLoaded, setIsLoaded } = useContext(AppContext);
 
   const [page, setPage] = useState(0);
-  const [posts, setPosts] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [comments, setComments] = useState([]);
-
-  const getPosts = () => {
-    axios.get("https://jsonplaceholder.typicode.com/posts")
-      .then(response => {
-        if (response.status === 200) {
-          setPosts(response.data);
-        }
-      })
-      .catch(error => {
-
-      })
-  }
-
-  const getUsers = () => {
-    axios.get("https://jsonplaceholder.typicode.com/users")
-      .then(response => {
-        if (response.status === 200) {
-          setUsers(response.data);
-        }
-      })
-      .catch(error => {
-
-      })
-  }
-
-  const getComments = () => {
-    axios.get("https://jsonplaceholder.typicode.com/comments")
-      .then(response => {
-        if (response.status === 200) {
-          setComments(response.data);
-        }
-      })
-      .catch(error => {
-
-      })
-  }
+  const { posts } = useContext(AppContext);
 
   useEffect(() => {
     setIsLoaded(false);
 
-    getPosts();
-    getUsers();
-    getComments();
-
-    setTimeout(() => setIsLoaded(true), 1500);
+    setTimeout(() => setIsLoaded(true), 1000);
   }, []);
 
   return (
@@ -74,10 +31,11 @@ const Posts = () => {
             {(posts.slice(page * pageSize, page * pageSize + pageSize)).map((post, index) => (
               <Link className={`${styles['post-item']}`} key={key.current++} to={`/posts/${post.id}`} >
                 <div className={`${styles['post-thumbnail']} container-fluid d-flex flex-column`} key={key.current++}>
-                  <span className={`${styles['post-title']}`}>{post.title}</span>
-                  <div className="container-fluid d-flex justify-content-start align-items-center px-0">
-                    <small className="col-md-2 mx-0" key={key.current++}>👤 <i>{(users.find(user => user.id === post.userId)).username}</i></small>
-                    <small className="col-md-10 mx-3" key={key.current++}>💬 <i>Comments: </i>{comments.filter(comment => comment.postId === post.id).length} </small>
+                  <span className={`${styles['post-title']}`}>{post?.post ? post?.post : "<untitled>"}</span>
+                  <div className="row container-fluid d-flex justify-content-start align-items-center px-0">
+                    <small className="col-md-1" key={key.current++}>👤 <i>{post?.user ? post?.user : "Guest"}</i></small>
+                    <small className="col-md-2" key={key.current++}>💬 <i>Comments: </i>{post?.reply?.length > 0 ? post?.reply?.length : 0}</small>
+                    <small className="col-md-3" key={key.current++}>📅 <i>Date: </i>{post?.date ? post?.date : ""}</small>
                   </div>
                 </div>
                 {index < posts.length - 1 && <hr className="my-1" />}
