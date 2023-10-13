@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Button } from "@mui/material";
+import NewPostModal from './NewPostModal';
 
 import AppContext from '../contexts/AppContext';
 
@@ -11,10 +12,16 @@ const Posts = () => {
   const key = useRef(0);
   const pageSize = 15;
 
-  const { isLoaded, setIsLoaded } = useContext(AppContext);
+  const { isLoaded, setIsLoaded, user } = useContext(AppContext);
 
   const [page, setPage] = useState(0);
+  const [showNewPostModal, setShowNewPostModal] = useState(false);
+
   const { posts } = useContext(AppContext);
+
+  const handleNewPostClick = (e) => {
+    setShowNewPostModal(true);
+  }
 
   useEffect(() => {
     setIsLoaded(false);
@@ -24,8 +31,25 @@ const Posts = () => {
 
   return (
     <div className={`${styles['posts-container']} container-fluid`}>
+      <NewPostModal show={showNewPostModal} onHide={() => setShowNewPostModal(false)} />
       <div className={`${styles['posts-content']} container bg-white px-4`}>
-        <h3>Posts</h3>
+        <div className="row d-flex justify-content-end align-items-center">
+          <div className="col-md-10">
+            <h3>Posts</h3>
+          </div>
+          <div className="col-md-2">
+            {user &&
+              <Button variant="contained" color="success" onClick={handleNewPostClick}>
+                <div className="container-fluid d-flex justify-content-center align-items-center">
+                  <svg height="24px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                  <span>New Post</span>
+                </div>
+              </Button>
+            }
+          </div>
+        </div>
         {isLoaded ?
           <div className="d-flex flex-column mt-3">
             {(posts.slice(page * pageSize, page * pageSize + pageSize)).map((post, index) => (

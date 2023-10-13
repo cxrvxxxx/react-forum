@@ -29,7 +29,7 @@ const Post = () => {
 
   useEffect(() => {
     setComments(post?.reply ? post?.reply : []);
-  }, [comments])
+  }, [post])
 
   return (
     <div className={`${styles.post} container-fluid`}>
@@ -38,8 +38,8 @@ const Post = () => {
           <div className="row">
             <div className="col-md-12 my-3 d-flex align-items-center">
               <Link to="/posts" style={{ color: "black", fontWeight: "bolder" }}>
-                <svg height="32px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
+                <svg height="32px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
                 </svg>
               </Link>
               <b className="mx-3">Viewing Post</b>

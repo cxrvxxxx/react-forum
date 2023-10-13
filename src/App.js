@@ -18,18 +18,7 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
 
-  const value = {
-    posts,
-    setPosts,
-    isLoaded,
-    setIsLoaded,
-    user,
-    setUser
-  }
-
-  useEffect(() => {
-    setIsLoaded(false);
-
+  const fetchPosts = () => {
     axios.get("http://hyeumine.com/forumGetPosts.php")
       .then(response => {
         if (response.status === 200) {
@@ -43,6 +32,12 @@ function App() {
       .catch(error => {
 
       })
+  }
+
+  useEffect(() => {
+    setIsLoaded(false);
+
+    fetchPosts();
 
     setTimeout(() => setIsLoaded(true), 1500);
   }, []);
@@ -54,6 +49,16 @@ function App() {
   useEffect(() => {
     console.log(user);
   }, [user])
+
+  const value = {
+    posts,
+    setPosts,
+    isLoaded,
+    setIsLoaded,
+    user,
+    setUser,
+    fetchPosts
+  }
 
 
   return (

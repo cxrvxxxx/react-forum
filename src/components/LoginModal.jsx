@@ -37,7 +37,6 @@ const LoginModal = (props) => {
           setIsInvalid(true);
         }
         setUser(response.data);
-        setIsLoaded(false);
         props.onHide();
       })
       .catch(error => {
