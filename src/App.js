@@ -34,6 +34,14 @@ function App() {
       })
   }
 
+  const pathToList = () => {
+    return pathname.split("/")
+      .slice(
+        1,
+        pathname.split("/").length
+      )
+  }
+
   useEffect(() => {
     setIsLoaded(false);
 
@@ -64,15 +72,19 @@ function App() {
   return (
     <AppContext.Provider value={value}>
       <div className="App">
+        {/* Render Navbar */}
         <ForumNavbar />
 
         <div className="app-content">
-          {pathname !== '/' && <div className="container d-flex align-items-bottom">
-            <small className="breadcrumbs mt-5">Forums {
-              (pathname.split("/")).slice(1, pathname.split("/").length).map(path => `➜ ${path}`)
-            }</small>
-          </div>}
 
+          {/* Render Breadcrumb */}
+          {pathname !== '/' &&
+            <div className="container d-flex align-items-bottom">
+              <small className="breadcrumbs mt-5">Forums {pathToList().map(path => `➜ ${path}`)}</small>
+            </div>
+          }
+
+          {/* Define Routes */}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/posts" element={<Posts />} />

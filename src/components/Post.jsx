@@ -2,11 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-import { CircularProgress } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 
 import AppContext from '../contexts/AppContext';
 
 import styles from '../styles/Post.module.css';
+import ConfirmDeletePost from "./ConfirmDeletePostModal";
 
 const Post = () => {
   const { id } = useParams();
@@ -16,6 +17,11 @@ const Post = () => {
 
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
+  const [showDeletePostConfirm, setShowDeletePostConfirm] = useState(false);
+
+  const handleDeletePostClick = (e) => {
+    setShowDeletePostConfirm(true);
+  }
 
   useEffect(() => {
     if (!posts) return;
@@ -25,8 +31,6 @@ const Post = () => {
     setTimeout(() => setIsLoaded(true), 1000);
   }, []);
 
-
-
   useEffect(() => {
     setComments(post?.reply ? post?.reply : []);
   }, [post])
@@ -35,15 +39,27 @@ const Post = () => {
     <div className={`${styles.post} container-fluid`}>
       {isLoaded ?
         <div className={`${styles['post-container']} container bg-white px-4 pb-5`}>
-          <div className="row">
-            <div className="col-md-12 my-3 d-flex align-items-center">
+
+          <div className="row py-3 d-flex justify-content-between align-items-center">
+
+            <div className="col-6 d-flex align-items-center">
               <Link to="/posts" style={{ color: "black", fontWeight: "bolder" }}>
                 <svg height="32px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
                 </svg>
               </Link>
               <b className="mx-3">Viewing Post</b>
+              <ConfirmDeletePost show={showDeletePostConfirm} onHide={() => setShowDeletePostConfirm(false)} />
             </div>
+
+            <div className="col-6 d-flex justify-content-end">
+              <Button variant="outlined" color="error" onClick={handleDeletePostClick}>
+                <div className="d-flex align-items-center">
+                  Delete Post
+                </div>
+              </Button>
+            </div>
+
           </div>
           <div className="row ">
             <div className="col-md-12"><hr className="m-0 p-0" /></div>
