@@ -1,14 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "@mui/material";
 import { Modal, Form } from "react-bootstrap";
 
-import AppContext from "../contexts/AppContext";
-import { useNavigate } from "react-router-dom";
-
 const ConfirmDeletePost = (props) => {
-  const { fetchPosts } = useContext(AppContext);
-
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {

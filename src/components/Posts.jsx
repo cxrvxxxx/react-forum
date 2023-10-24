@@ -24,11 +24,7 @@ const Posts = () => {
   }
 
   useEffect(() => {
-    setIsLoaded(false);
-
     fetchPosts();
-
-    setTimeout(() => setIsLoaded(true), 1000);
   }, []);
 
   return (

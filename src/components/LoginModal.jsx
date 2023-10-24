@@ -11,7 +11,7 @@ const LoginModal = (props) => {
   const [password, setPassword] = useState('');
   const [isInvalid, setIsInvalid] = useState(false);
 
-  const { setUser, setIsLoaded } = useContext(AppContext);
+  const { setUser } = useContext(AppContext);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);

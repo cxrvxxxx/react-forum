@@ -36,7 +36,7 @@ function App() {
 
       })
 
-    setIsLoaded(true);
+    setTimeout(() => setIsLoaded(true), 500);
   }
 
   const pathToList = () => {
@@ -48,16 +48,12 @@ function App() {
   }
 
   useEffect(() => {
-    setIsLoaded(false);
-
     fetchPosts();
-
-    setTimeout(() => setIsLoaded(true), 1500);
   }, []);
 
-  useEffect(() => {
-    setIsLoaded(false);
-  }, [pathname]);
+  // useEffect(() => {
+  //   setIsLoaded(false);
+  // }, [pathname]);
 
   useEffect(() => {
     console.log(user);
