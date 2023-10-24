@@ -1,31 +1,20 @@
 import React, { useContext } from "react";
-import axios from "axios";
 
 import { Button } from "@mui/material";
 import { Modal, Form } from "react-bootstrap";
 
-import AppContext from '../contexts/AppContext';
+import AppContext from "../contexts/AppContext";
+import { useNavigate } from "react-router-dom";
 
 const ConfirmDeletePost = (props) => {
   const { fetchPosts } = useContext(AppContext);
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
-    axios.post(`http://hyeumine.com/forumDeletePost.php?id=${props.postId}`, {}, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    })
-      .then(response => {
-        if (!(response.status === 200 && response.statusText === "OK")) {
-          throw new Error('Network response was not ok');
-        }
-        props.onHide();
-        fetchPosts();
-        // TODO: Redirect user to '/posts'
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
+    props.onSubmit();
+    props.onHide();
+    navigate('/posts');
   }
 
   return (

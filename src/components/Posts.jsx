@@ -17,7 +17,7 @@ const Posts = () => {
   const [page, setPage] = useState(0);
   const [showNewPostModal, setShowNewPostModal] = useState(false);
 
-  const { posts } = useContext(AppContext);
+  const { posts, fetchPosts } = useContext(AppContext);
 
   const handleNewPostClick = (e) => {
     setShowNewPostModal(true);
@@ -25,6 +25,8 @@ const Posts = () => {
 
   useEffect(() => {
     setIsLoaded(false);
+
+    fetchPosts();
 
     setTimeout(() => setIsLoaded(true), 1000);
   }, []);

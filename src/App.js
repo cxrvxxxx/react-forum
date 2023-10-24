@@ -19,6 +19,8 @@ function App() {
   const [user, setUser] = useState(null);
 
   const fetchPosts = () => {
+    setIsLoaded(false);
+
     axios.get("http://hyeumine.com/forumGetPosts.php")
       .then(response => {
         if (response.status === 200) {
@@ -28,10 +30,13 @@ function App() {
             return dateB - dateA;
           }));
         }
+        console.log(response)
       })
       .catch(error => {
 
       })
+
+    setIsLoaded(true);
   }
 
   const pathToList = () => {

@@ -24,11 +24,10 @@ const NewPostModal = (props) => {
       }
     })
       .then(response => {
-        if (!(response.status === 200 && response.statusText === "OK")) {
-
+        if (response.status === 200) {
+          fetchPosts();
+          props.onHide();
         }
-        fetchPosts();
-        props.onHide();
       })
       .catch(error => {
         console.error('There was a problem with the fetch operation:', error);

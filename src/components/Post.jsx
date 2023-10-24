@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 import { Button, CircularProgress } from "@mui/material";
 
@@ -12,28 +13,60 @@ import ConfirmDeletePost from "./ConfirmDeletePostModal";
 const Post = () => {
   const { id } = useParams();
 
-  const { isLoaded, setIsLoaded } = useContext(AppContext);
-  const { posts } = useContext(AppContext);
+  const { user, posts, fetchPosts, isLoaded, setIsLoaded } = useContext(AppContext);
 
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [showDeletePostConfirm, setShowDeletePostConfirm] = useState(false);
+  const [newReply, setNewReply] = useState('');
+  const [forceRender, setForceRender] = useState(false);
+  const [rr,setRR] = useState(1)
+
+  const handleForceRender = () => {
+    setForceRender(prevForceRender => !prevForceRender);
+  };
 
   const handleDeletePostClick = (e) => {
     setShowDeletePostConfirm(true);
   }
 
+  const handleDeleteConfirm = (e) => {
+    axios.post(`http://hyeumine.com/forumDeletePost.php?id=${id}`, {}, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
+      .then(response => {
+        if (response.status === 200) {
+          console.log(`Deleted post with ID: ${id}`);
+          fetchPosts();
+        }
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+  }
+
+  
   useEffect(() => {
-    if (!posts) return;
-
     setPost(posts.filter(item => item.id == id)[0]);
+  },[posts])
+  useEffect(() => {
+    
+    fetchPosts();
 
-    setTimeout(() => setIsLoaded(true), 1000);
-  }, []);
+    // if (!posts) return;
+
+    // setPost(posts.filter(item => item.id == id)[0]);
+
+    // setTimeout(() => setIsLoaded(true), 1000);
+  }, [rr]);
 
   useEffect(() => {
     setComments(post?.reply ? post?.reply : []);
   }, [post])
+
+  useEffect(() => {handleForceRender();}, [comments]);
 
   return (
     <div className={`${styles.post} container-fluid`}>
@@ -49,15 +82,15 @@ const Post = () => {
                 </svg>
               </Link>
               <b className="mx-3">Viewing Post</b>
-              <ConfirmDeletePost show={showDeletePostConfirm} onHide={() => setShowDeletePostConfirm(false)} />
+              <ConfirmDeletePost onSubmit={handleDeleteConfirm} show={showDeletePostConfirm} onHide={() => setShowDeletePostConfirm(false)} />
             </div>
 
             <div className="col-6 d-flex justify-content-end">
-              <Button variant="outlined" color="error" onClick={handleDeletePostClick}>
+              {user?.id == post?.uid && <Button variant="outlined" color="error" onClick={handleDeletePostClick}>
                 <div className="d-flex align-items-center">
                   Delete Post
                 </div>
-              </Button>
+              </Button>}
             </div>
 
           </div>
@@ -80,6 +113,48 @@ const Post = () => {
           <div className="row ">
             <div className="col-md-12"><hr className="m-0 p-0" /></div>
           </div>
+          {user && <>
+              <div className="row ">
+                <div className="col-md-12 px-5 py-3">
+                    <input
+                      className="col-md-12 form-control"
+                      type="text"
+                      placeholder="Reply to this post"
+                      value={newReply}
+                      onChange={e => setNewReply(e.target.value)}
+                      onKeyDown={e => {
+                        if (e.key === "Enter") {
+                          setIsLoaded(false);
+                          axios.post(`http://hyeumine.com/forumReplyPost.php`, {
+                            user_id: user.id,
+                            post_id: post.id,
+                            reply: newReply
+                          }, {
+                            headers: {
+                              'Content-Type': 'application/x-www-form-urlencoded'
+                            }
+                          })
+                          .then(response => {
+                            console.log(response);
+                            if (response.status === 200) {
+                              setNewReply('');
+                            }
+                          })
+                          .catch(error => {
+                              console.error('There was a problem with the fetch operation:', error);
+                          }).finally(()=>{
+                            setTimeout(()=>{setRR(Math.random()*1000)},1000);})
+                        }
+                        // setTimeout(() => {handleForceRender()}, 3000);
+                      }}
+                    />
+                </div>
+              </div>
+              <div className="row ">
+                <div className="col-md-12"><hr className="m-0 p-0" /></div>
+              </div>
+            </>
+        }
           {comments.length > 0 &&
             <>
               <div className="row">
@@ -98,8 +173,32 @@ const Post = () => {
                         <span className="d-flex justify-content-center pt-2">({comment?.date}) {comment?.user}</span>
                       </div>
                     </div>
-                    <div className="col-md-9 px-4 py-2 d-flex flex-column">
+                    <div className="col-md-8 px-4 py-2 d-flex flex-column">
                       <span>{comment?.reply}</span>
+                    </div>
+                    <div className="col-md-1 px-4 py-2 d-flex flex-column">
+                      {user?.id == comment?.uid && <Button
+                        size="small"
+                        color="error"
+                        variant="contained"
+                        onClick={e => {
+                          axios.post(`http://hyeumine.com/forumDeleteReply.php?id=${comment.id}`,{}, {
+                            headers: {
+                              'Content-Type': 'application/x-www-form-urlencoded'
+                            }
+                          })
+                          .then(response => {
+                              if (!(response.status===200 && response.statusText==="OK")) {
+                                  throw new Error('Network response was not ok');
+                              }
+                              setRR(Math.random()*1000)
+                          })
+                          .catch(error => {
+                              console.error('There was a problem with the fetch operation:', error);
+                          })
+                          setTimeout(() => {handleForceRender()}, 3000);
+                        }}
+                        >Delete</Button>}
                     </div>
                   </div>
                   <div className="row ">
