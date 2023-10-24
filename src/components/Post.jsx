@@ -24,21 +24,21 @@ const Post = () => {
     setShowDeletePostConfirm(true);
   }
 
-  const handleDeleteConfirm = (e) => {
-    axios.post(`http://hyeumine.com/forumDeletePost.php?id=${id}`, {}, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    })
-      .then(response => {
-        if (response.status === 200) {
-          console.log(`Deleted post with ID: ${id}`);
-          fetchPosts();
+  const handleDeleteConfirm = async (e) => {
+    try {
+      const response = await axios.post(`http://hyeumine.com/forumDeletePost.php?id=${id}`, {}, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
       });
+
+      if (response.status === 200) {
+        console.log(`Deleted post with ID: ${id}`);
+        await fetchPosts();
+      }
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
   }
 
   useEffect(() => {

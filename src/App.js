@@ -18,23 +18,23 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
 
-  const fetchPosts = () => {
+  const fetchPosts = async () => {
     setIsLoaded(false);
 
-    axios.get("http://hyeumine.com/forumGetPosts.php")
-      .then(response => {
-        if (response.status === 200) {
-          setPosts(response.data.sort((a, b) => {
-            const dateA = new Date(a.date);
-            const dateB = new Date(b.date);
-            return dateB - dateA;
-          }));
-        }
-        console.log(response)
-      })
-      .catch(error => {
+    try {
+      const response = await axios.get("http://hyeumine.com/forumGetPosts.php");
 
-      })
+      if (response.status === 200) {
+        setPosts(response.data.sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+          return dateB - dateA;
+        }));
+      }
+      console.log(response);
+    } catch (error) {
+      // Handle the error here
+    }
 
     setTimeout(() => setIsLoaded(true), 500);
   }

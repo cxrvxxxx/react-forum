@@ -14,24 +14,24 @@ const NewPostModal = (props) => {
     setBody(e.target.value);
   }
 
-  const handleSubmit = (e) => {
-    axios.post(`http://hyeumine.com/forumNewPost.php`, {
-      id: user.id,
-      post: body
-    }, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    })
-      .then(response => {
-        if (response.status === 200) {
-          fetchPosts();
-          props.onHide();
+  const handleSubmit = async (e) => {
+    try {
+      const response = await axios.post('http://hyeumine.com/forumNewPost.php', {
+        id: user.id,
+        post: body
+      }, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
       });
+
+      if (response.status === 200) {
+        await fetchPosts();
+        props.onHide();
+      }
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
   }
 
   return (

@@ -23,25 +23,26 @@ const LoginModal = (props) => {
     setIsInvalid(false);
   }
 
-  const handleSubmit = (e) => {
-    axios.post(`http://hyeumine.com/forumCreateUser.php`, {
-      username: email,
-      password: password
-    }, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    })
-      .then(response => {
-        if (!(response.status === 200 && response.statusText === "OK")) {
-          setIsInvalid(true);
+  const handleSubmit = async (e) => {
+    try {
+      const response = await axios.post('http://hyeumine.com/forumCreateUser.php', {
+        username: email,
+        password: password
+      }, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
+      });
+
+      if (response.status === 200) {
         setUser(response.data);
         props.onHide();
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
+      } else {
+        setIsInvalid(true);
+      }
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
   }
 
   return (
