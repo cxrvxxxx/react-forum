@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -13,7 +13,7 @@ import ConfirmDeletePost from "./ConfirmDeletePostModal";
 const Post = () => {
   const { id } = useParams();
 
-  const { user, posts, fetchPosts, isLoaded } = useContext(AppContext);
+  const { user, posts, fetchPosts, isLoaded, setIsLoaded } = useContext(AppContext);
 
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
@@ -33,7 +33,6 @@ const Post = () => {
       });
 
       if (response.status === 200) {
-        console.log(`Deleted post with ID: ${id}`);
         await fetchPosts();
       }
     } catch (error) {
@@ -42,7 +41,9 @@ const Post = () => {
   }
 
   useEffect(() => {
+    setIsLoaded(false);
     fetchPosts();
+    setTimeout(() => { setIsLoaded(true) }, 1000);
   }, [])
 
   useEffect(() => {
@@ -119,7 +120,6 @@ const Post = () => {
                         }
                       })
                         .then(response => {
-                          console.log(response);
                           if (response.status === 200) {
                             setNewReply('');
                             fetchPosts();
@@ -149,7 +149,7 @@ const Post = () => {
                 <div className="col-md-12"><hr className="m-0 p-0" /></div>
               </div>
               {post?.reply?.map(comment =>
-                <>
+                <React.Fragment key={comment.id}>
                   <div className="row">
                     <div className="col-md-3">
                       <div className={`${styles['reply-user']} h-100 px-3`}>
@@ -186,7 +186,7 @@ const Post = () => {
                   <div className="row ">
                     <div className="col-md-12"><hr className="m-0 p-0" /></div>
                   </div>
-                </>
+                </React.Fragment>
               )}
             </>
           }

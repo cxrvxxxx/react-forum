@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { CircularProgress, Button } from "@mui/material";
@@ -9,7 +9,6 @@ import AppContext from '../contexts/AppContext';
 import styles from '../styles/Posts.module.css';
 
 const Posts = () => {
-  const key = useRef(0);
   const pageSize = 15;
 
   const { isLoaded, setIsLoaded, user } = useContext(AppContext);
@@ -24,7 +23,9 @@ const Posts = () => {
   }
 
   useEffect(() => {
+    setIsLoaded(false);
     fetchPosts();
+    setTimeout(() => { setIsLoaded(true) }, 1000);
   }, []);
 
   return (
@@ -51,13 +52,13 @@ const Posts = () => {
         {isLoaded ?
           <div className="d-flex flex-column mt-3">
             {(posts.slice(page * pageSize, page * pageSize + pageSize)).map((post, index) => (
-              <Link className={`${styles['post-item']}`} key={key.current++} to={`/posts/${post.id}`} >
-                <div className={`${styles['post-thumbnail']} container-fluid d-flex flex-column`} key={key.current++}>
+              <Link className={`${styles['post-item']}`} key={post.id} to={`/posts/${post.id}`} >
+                <div className={`${styles['post-thumbnail']} container-fluid d-flex flex-column`}>
                   <span className={`${styles['post-title']}`}>{post?.post ? post?.post : "<untitled>"}</span>
                   <div className="row container-fluid d-flex justify-content-start align-items-center px-0">
-                    <small className="col-md-1" key={key.current++}>👤 <i>{post?.user ? post?.user : "Guest"}</i></small>
-                    <small className="col-md-2" key={key.current++}>💬 <i>Comments: </i>{post?.reply?.length > 0 ? post?.reply?.length : 0}</small>
-                    <small className="col-md-3" key={key.current++}>📅 <i>Date: </i>{post?.date ? post?.date : ""}</small>
+                    <small className="col-md-1">👤 <i>{post?.user ? post?.user : "Guest"}</i></small>
+                    <small className="col-md-2">💬 <i>Comments: </i>{post?.reply?.length > 0 ? post?.reply?.length : 0}</small>
+                    <small className="col-md-3">📅 <i>Date: </i>{post?.date ? post?.date : ""}</small>
                   </div>
                 </div>
                 {index < posts.length - 1 && <hr className="my-1" />}

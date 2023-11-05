@@ -12,6 +12,7 @@ import AppContext from './contexts/AppContext';
 import './styles/App.css';
 
 function App() {
+  let intervalId;
   const { pathname } = useLocation();
 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -19,8 +20,6 @@ function App() {
   const [user, setUser] = useState(null);
 
   const fetchPosts = async () => {
-    setIsLoaded(false);
-
     try {
       const response = await axios.get("http://hyeumine.com/forumGetPosts.php");
 
@@ -31,12 +30,9 @@ function App() {
           return dateB - dateA;
         }));
       }
-      console.log(response);
     } catch (error) {
-      // Handle the error here
-    }
 
-    setTimeout(() => setIsLoaded(true), 500);
+    }
   }
 
   const pathToList = () => {
@@ -48,16 +44,14 @@ function App() {
   }
 
   useEffect(() => {
-    fetchPosts();
+    intervalId = setInterval(() => {
+      fetchPosts();
+    }, 5000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
-
-  // useEffect(() => {
-  //   setIsLoaded(false);
-  // }, [pathname]);
-
-  useEffect(() => {
-    console.log(user);
-  }, [user])
 
   const value = {
     posts,
