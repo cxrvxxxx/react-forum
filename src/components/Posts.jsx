@@ -55,10 +55,10 @@ const Posts = () => {
               <Link className={`${styles['post-item']}`} key={post.id} to={`/posts/${post.id}`} >
                 <div className={`${styles['post-thumbnail']} container-fluid d-flex flex-column`}>
                   <span className={`${styles['post-title']}`}>{post?.post ? post?.post : "<untitled>"}</span>
-                  <div className="row container-fluid d-flex justify-content-start align-items-center px-0">
-                    <small className="col-md-1">👤 <i>{post?.user ? post?.user : "Guest"}</i></small>
-                    <small className="col-md-2">💬 <i>Comments: </i>{post?.reply?.length > 0 ? post?.reply?.length : 0}</small>
-                    <small className="col-md-3">📅 <i>Date: </i>{post?.date ? post?.date : ""}</small>
+                  <div className="row container-fluid d-flex justify-content-between align-items-center px-0">
+                    <small className="col-md-4">👤 <i>{post?.user ? post?.user : "Guest"}</i></small>
+                    <small className="col-md-4">📅 {post?.date ? post?.date : ""}</small>
+                    <small className="col-md-4">💬 {post?.reply?.length > 0 ? post?.reply?.length : 0}</small>
                   </div>
                 </div>
                 {index < posts.length - 1 && <hr className="my-1" />}

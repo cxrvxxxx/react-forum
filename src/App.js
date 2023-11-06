@@ -36,6 +36,7 @@ function App() {
   }
 
   const pathToList = () => {
+    /* Splits the full URL */
     return pathname.split("/")
       .slice(
         1,
@@ -44,15 +45,18 @@ function App() {
   }
 
   useEffect(() => {
+    /* Interval set to update posts */
     intervalId = setInterval(() => {
       fetchPosts();
     }, 5000);
 
+    /* Clear the interval on dismount */
     return () => {
       clearInterval(intervalId);
     };
   }, []);
 
+  /* Exposing to context provider */
   const value = {
     posts,
     setPosts,
